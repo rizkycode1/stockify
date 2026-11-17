@@ -3,13 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kategori;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class KategoriController extends Controller
 {
+    protected function currentCompanyId(): int
+    {
+        /** @var User|null $user */
+        $user = Auth::user();
+
+        if (! $user) {
+            abort(403);
+        }
+
+        return (int) $user->company_id;
+    }
+
     public function index()
     {
-        $kategoris = Kategori::latest()->get();
+        $kategoris = Kategori::where(
+            'company_id',
+            $this->currentCompanyId()
+        )->latest()->get();
 
         return view('kategori.index', compact('kategoris'));
     }
@@ -21,15 +38,15 @@ class KategoriController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nama_kategori' => 'required|max:255',
             'deskripsi' => 'nullable'
         ]);
 
-        Kategori::create($request->only([
-            'nama_kategori',
-            'deskripsi'
-        ]));
+        Kategori::create([
+            ...$validated,
+            'company_id' => $this->currentCompanyId(),
+        ]);
 
         return redirect()->route('kategori.index')
             ->with('success', 'Kategori berhasil ditambahkan!');
@@ -37,20 +54,27 @@ class KategoriController extends Controller
 
     public function edit(Kategori $kategori)
     {
+        $kategori = Kategori::where(
+            'company_id',
+            $this->currentCompanyId()
+        )->findOrFail($kategori->getKey());
+
         return view('kategori.edit', compact('kategori'));
     }
 
     public function update(Request $request, Kategori $kategori)
     {
-        $request->validate([
+        $kategori = Kategori::where(
+            'company_id',
+            $this->currentCompanyId()
+        )->findOrFail($kategori->getKey());
+
+        $validated = $request->validate([
             'nama_kategori' => 'required|max:255',
             'deskripsi' => 'nullable'
         ]);
 
-        $kategori->update($request->only([
-            'nama_kategori',
-            'deskripsi'
-        ]));
+        $kategori->update($validated);
 
         return redirect()->route('kategori.index')
             ->with('success', 'Kategori berhasil diperbarui!');
@@ -58,6 +82,11 @@ class KategoriController extends Controller
 
     public function destroy(Kategori $kategori)
     {
+        $kategori = Kategori::where(
+            'company_id',
+            $this->currentCompanyId()
+        )->findOrFail($kategori->getKey());
+
         $kategori->delete();
 
         return redirect()->route('kategori.index')

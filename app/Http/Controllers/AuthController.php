@@ -22,6 +22,18 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
+            // Pastikan akun terhubung dengan perusahaan
+            if (!Auth::user()->company_id) {
+                Auth::logout();
+
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return redirect('/login')->withErrors([
+                    'email' => 'Akun belum terhubung dengan perusahaan.',
+                ]);
+            }
+
             return redirect()->intended('/dashboard');
         }
 

@@ -25,9 +25,7 @@
             --red: #ff647c;
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -36,9 +34,7 @@
             font-family: 'Inter', sans-serif;
         }
 
-        a {
-            text-decoration: none;
-        }
+        a { text-decoration: none; }
 
         .sidebar {
             position: fixed;
@@ -177,9 +173,7 @@
             color: var(--muted);
         }
 
-        .topbar-title strong {
-            color: var(--text);
-        }
+        .topbar-title strong { color: var(--text); }
 
         .user-profile {
             display: flex;
@@ -210,9 +204,7 @@
             color: var(--muted);
         }
 
-        .content-area {
-            padding: 30px;
-        }
+        .content-area { padding: 30px; }
 
         .panel, .card {
             background: var(--panel);
@@ -234,9 +226,7 @@
             box-shadow: 0 0 0 .2rem rgba(57,132,255,.15);
         }
 
-        .form-control::placeholder {
-            color: var(--muted);
-        }
+        .form-control::placeholder { color: var(--muted); }
 
         .table {
             --bs-table-bg: transparent;
@@ -244,43 +234,23 @@
             --bs-table-border-color: var(--border);
         }
 
-        .text-muted {
-            color: var(--muted) !important;
-        }
+        .text-muted { color: var(--muted) !important; }
 
         .btn-primary {
             background: var(--blue);
             border-color: var(--blue);
         }
 
-        .btn-primary:hover {
-            background: #2169df;
-        }
+        .btn-primary:hover { background: #2169df; }
 
-        .alert {
-            border-radius: 12px;
-        }
+        .alert { border-radius: 12px; }
 
         @media(max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.show {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-
-            .content-area {
-                padding: 18px;
-            }
-
-            .topbar {
-                padding: 0 18px;
-            }
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .content-area { padding: 18px; }
+            .topbar { padding: 0 18px; }
         }
 
         @media print {
@@ -288,9 +258,7 @@
                 display: none !important;
             }
 
-            .main-content {
-                margin: 0;
-            }
+            .main-content { margin: 0; }
 
             body {
                 background: white;
@@ -344,10 +312,18 @@
             Supplier
         </a>
 
+        <div class="menu-label">STOCK MANAGEMENT</div>
+
         <a href="{{ route('barang-masuk.index') }}"
            class="nav-link-custom {{ request()->routeIs('barang-masuk.*') ? 'active' : '' }}">
             <i class="fas fa-dolly"></i>
             Barang Masuk
+        </a>
+
+        <a href="{{ route('barang-keluar.index') }}"
+           class="nav-link-custom {{ request()->routeIs('barang-keluar.*') ? 'active' : '' }}">
+            <i class="fas fa-arrow-up-from-bracket"></i>
+            Barang Keluar
         </a>
 
         <div class="menu-label">REPORTS & ACTIVITY</div>

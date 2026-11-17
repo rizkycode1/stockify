@@ -10,11 +10,17 @@ class BarangMasuk extends Model
     use LogsActivity;
 
     protected $fillable = [
+        'company_id',
         'barang_id',
         'jumlah',
         'tanggal',
-        'keterangan'
+        'keterangan',
     ];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 
     public function barang()
     {

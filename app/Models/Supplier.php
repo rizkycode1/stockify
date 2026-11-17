@@ -10,10 +10,16 @@ class Supplier extends Model
     use LogsActivity;
 
     protected $fillable = [
+        'company_id',
         'nama_supplier',
         'telepon',
-        'alamat'
+        'alamat',
     ];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 
     public function barangs()
     {

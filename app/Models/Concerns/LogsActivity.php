@@ -5,26 +5,21 @@ namespace App\Models\Concerns;
 use App\Models\ActivityLog;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
 
-/**
- * @mixin \Illuminate\Database\Eloquent\Model
- * @method static void created(\Closure $callback)
- * @method static void updated(\Closure $callback)
- * @method static void deleted(\Closure $callback)
- */
 trait LogsActivity
 {
     protected static function bootLogsActivity(): void
     {
-        static::created(function (Model $model) {
+        Event::listen('eloquent.created: ' . static::class, function (Model $model) {
             self::record($model, 'Menambahkan');
         });
 
-        static::updated(function (Model $model) {
+        Event::listen('eloquent.updated: ' . static::class, function (Model $model) {
             self::record($model, 'Mengubah');
         });
 
-        static::deleted(function (Model $model) {
+        Event::listen('eloquent.deleted: ' . static::class, function (Model $model) {
             self::record($model, 'Menghapus');
         });
     }
@@ -36,7 +31,11 @@ trait LogsActivity
             ?? $model->getAttribute('nama_supplier')
             ?? 'Barang Masuk';
 
+        $companyId = $model->getAttribute('company_id')
+            ?? Auth::user()?->company_id;
+
         ActivityLog::create([
+            'company_id' => $companyId,
             'user_id' => Auth::id(),
             'action' => $action,
             'description' => "$action data: $nama",

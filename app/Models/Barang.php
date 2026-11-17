@@ -10,12 +10,19 @@ class Barang extends Model
     use LogsActivity;
 
     protected $fillable = [
+        'company_id',
         'nama_barang',
         'kategori_id',
         'supplier_id',
         'harga',
-        'stok'
+        'stok',
+        'foto',
     ];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 
     public function kategori()
     {
@@ -30,5 +37,10 @@ class Barang extends Model
     public function barangMasuks()
     {
         return $this->hasMany(BarangMasuk::class);
+    }
+
+    public function barangKeluars()
+    {
+        return $this->hasMany(BarangKeluar::class);
     }
 }

@@ -10,9 +10,15 @@ class Kategori extends Model
     use LogsActivity;
 
     protected $fillable = [
+        'company_id',
         'nama_kategori',
-        'deskripsi'
+        'deskripsi',
     ];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 
     public function barangs()
     {

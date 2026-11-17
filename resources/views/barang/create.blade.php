@@ -156,6 +156,40 @@
         color:#ff647c;
     }
 
+    .photo-upload {
+        border:2px dashed #304765;
+        border-radius:14px;
+        padding:22px;
+        text-align:center;
+        background:#0b1425;
+        cursor:pointer;
+        transition:.2s;
+    }
+
+    .photo-upload:hover {
+        border-color:#3984ff;
+        background:#101e35;
+    }
+
+    .photo-upload i {
+        font-size:30px;
+        color:#65a3ff;
+        margin-bottom:10px;
+    }
+
+    .photo-preview {
+        display:none;
+        margin-top:15px;
+    }
+
+    .photo-preview img {
+        width:150px;
+        height:150px;
+        object-fit:cover;
+        border-radius:12px;
+        border:1px solid #304765;
+    }
+
     @media(max-width:768px) {
         .form-card { padding:18px; }
         .create-title { font-size:21px; }
@@ -191,7 +225,7 @@
     </div>
 @endif
 
-<form action="{{ route('barang.store') }}" method="POST">
+<form action="{{ route('barang.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
     <div class="row g-4">
@@ -270,6 +304,40 @@
                         <div class="input-help">Opsional</div>
                     </div>
                 </div>
+            </div>
+
+            <div class="form-card">
+                <div class="form-section-title">
+                    <i class="fas fa-image field-icon"></i>
+                    Foto Barang
+                </div>
+
+                <div class="form-section-desc">
+                    Tambahkan gambar agar barang mudah dikenali.
+                </div>
+
+                <label for="foto" class="photo-upload d-block">
+                    <i class="fas fa-cloud-upload-alt d-block"></i>
+                    <strong class="text-white">Klik untuk memilih foto</strong>
+                    <div class="input-help">
+                        Format JPG, JPEG, PNG, WEBP · Maksimal 2 MB
+                    </div>
+                </label>
+
+                <input type="file"
+                       name="foto"
+                       id="foto"
+                       class="form-control mt-3"
+                       accept="image/jpeg,image/png,image/webp">
+
+                <div class="photo-preview" id="photoPreview">
+                    <p class="text-white small mb-2">Preview foto:</p>
+                    <img id="previewImage" src="" alt="Preview foto barang">
+                </div>
+
+                @error('foto')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
 
             <div class="form-card">
@@ -376,6 +444,14 @@
                 <div class="mb-3">
                     <div class="fw-bold text-white small mb-1">
                         <i class="fas fa-check-circle me-2" style="color:#22c58b;"></i>
+                        Foto Barang
+                    </div>
+                    <p>Gunakan foto yang jelas dengan ukuran maksimal 2 MB.</p>
+                </div>
+
+                <div class="mb-3">
+                    <div class="fw-bold text-white small mb-1">
+                        <i class="fas fa-check-circle me-2" style="color:#22c58b;"></i>
                         Harga Barang
                     </div>
                     <p>Masukkan harga barang dalam satuan rupiah.</p>
@@ -393,5 +469,28 @@
 
     </div>
 </form>
+
+<script>
+    document.getElementById('foto').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('photoPreview');
+        const image = document.getElementById('previewImage');
+
+        if (!file) {
+            preview.style.display = 'none';
+            return;
+        }
+
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Ukuran foto maksimal 2 MB!');
+            this.value = '';
+            preview.style.display = 'none';
+            return;
+        }
+
+        image.src = URL.createObjectURL(file);
+        preview.style.display = 'block';
+    });
+</script>
 
 @endsection

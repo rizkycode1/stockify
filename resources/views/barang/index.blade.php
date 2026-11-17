@@ -6,6 +6,30 @@
 
 @section('content')
 
+<style>
+    .product-photo {
+        width:52px;
+        height:52px;
+        min-width:52px;
+        object-fit:cover;
+        border-radius:12px;
+        border:1px solid #304765;
+        background:#1b3760;
+    }
+
+    .product-placeholder {
+        width:52px;
+        height:52px;
+        min-width:52px;
+        border-radius:12px;
+        background:#1b3760;
+        color:#75aaff;
+        display:grid;
+        place-items:center;
+        font-size:19px;
+    }
+</style>
+
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
     <div>
         <div class="text-primary fw-bold small mb-2">
@@ -152,10 +176,17 @@
 
                         <td>
                             <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-3"
-                                     style="width:40px;height:40px;background:#1b3760;color:#75aaff;display:grid;place-items:center">
-                                    <i class="fa-solid fa-box"></i>
-                                </div>
+
+                                @if($barang->foto)
+                                    <img
+                                        src="{{ asset('storage/' . $barang->foto) }}"
+                                        alt="{{ $barang->nama_barang }}"
+                                        class="product-photo">
+                                @else
+                                    <div class="product-placeholder">
+                                        <i class="fa-solid fa-box"></i>
+                                    </div>
+                                @endif
 
                                 <div>
                                     <div class="text-white fw-bold">
@@ -165,6 +196,7 @@
                                         ID: #{{ str_pad($barang->id, 4, '0', STR_PAD_LEFT) }}
                                     </small>
                                 </div>
+
                             </div>
                         </td>
 
